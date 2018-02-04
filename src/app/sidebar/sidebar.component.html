@@ -1,0 +1,33 @@
+<div id="sidebar">
+  <div class="sidebar-header">
+    <h3>Project</h3>
+    <strong><i class="fa fa-lightbulb-o"></i></strong>
+  </div>
+  <ng-container *ngTemplateOutlet="menuItems;context:{items: items}"></ng-container>
+  <button type="button" (click)="toggle()" class="btn btn-xs btn-info toggleButton" >
+    <i class="{{active ? 'fa fa-chevron-right':'fa fa-chevron-left'}}" style="transition: all 0.3s"></i>
+  </button>
+</div>
+
+<ng-template #menuItems let-items="items">
+  <ul class="list-unstyled">
+    <li *ngFor="let item of items" [ngStyle]="{'margin-left': calcMargin(item), 'font-size': calcFontSize(item)}">
+      <div *ngIf="item.children">
+        <a href="{{'#' + generateId(item)}}" data-toggle="collapse" aria-expanded="false">
+          <i class="fa {{item.icon}}"></i>
+          {{item.name}}
+        </a>
+      </div>
+      <div *ngIf="!item.children">
+        <a href="#">
+          <i class="fa {{item.icon}}"></i>
+          {{item.name}}
+        </a>
+      </div>
+      <div *ngIf="item.children" style="position: relative" id="{{generateId(item)}}" class="collapse">
+        <ng-container *ngTemplateOutlet="menuItems;context:{items: item.children}"></ng-container>
+
+      </div>
+    </li>
+  </ul>
+</ng-template>
